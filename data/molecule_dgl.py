@@ -18,6 +18,8 @@ from rdkit import Chem
 from rdkit.Chem.rdchem import HybridizationType
 from rdkit.Chem.rdchem import BondType as BT
 from rdkit.Chem import AllChem
+import math
+import random
 
 
 ATOM_LIST = list(range(1,119))
@@ -102,7 +104,16 @@ class MoleculeDataset(Dataset):
         N = mol.GetNumAtoms()
         M = mol.GetNumBonds()
         
-        num_mask_nodes = 
+        num_mask_nodes = max([1, math.floor(0.25*N)])
+        num_mask_edges = max([0, math.floor(0.25*M)])
+        mask_nodes_i = random.sample(list(range(N)), num_mask_nodes)
+        mask_nodes_j = random.sample(list(range(N)), num_mask_nodes)
+        mask_edges_i_single = random.sample(list(range(M)), num_mask_edges)
+        mask_edges_j_single = random.sample(list(range(M)), num_mask_edges)
+        mask_edges_i = [2*i for i in mask_edges_i_single] + [2*i+1 for i in mask_edges_i_single]
+        mask_edges_j = [2*i for i in mask_edges_j_single] + [2*i+1 for i in mask_edges_j_single]
+        
+        
 
 
 # class OGBMOLDGL(torch.utils.data.Dataset):
